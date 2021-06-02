@@ -25,7 +25,9 @@ function exportNetwork(type) {
     
     if(type != "session"){
     	var blob = new Blob([exportValue], {type: "application/json"});
-		saveAs(blob, $('#idText').text()+""+(new Date().getMilliseconds())+".dbw");
+		//saveAs(blob, $('#idText').text()+""+(new Date().getMilliseconds())+".dbw");
+    	//var x = document.getElementById("docs-title").value;
+		saveAs(blob, document.getElementById("docs-title").value+""+ ".dbw");//var x = document.getElementById("myForm").elements.namedItem("docs-title").value obtener el valor del input
     }else{
     	sessionStorage.setItem('codeSave', exportValue);
     }
@@ -56,7 +58,8 @@ function importNetwork(type, value=null) {
     for(var i = 0;i<inputData.edges_superA.length;i++){
     	edges_super.add(inputData.edges_superA[i]);
     }
-    updateTableElements();
+  updateTableElements();
+    
 }
 
 function uploadData(fd){
@@ -71,9 +74,14 @@ function uploadData(fd){
         	if(result[0]){
         		$("#textoFileDrag").text(result[0]);
         	}else{
+        		
         		importNetwork("file", result[1]);
         		$("#textoFileDrag").text(result[1]);
             	$("[aria-label='Close']").click();
+            	
+               // document.getElementById("docs-title").setAttribute('value',files[0].name);
+               
+
         	}        	
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -143,15 +151,21 @@ function dataExist(){
         e.preventDefault();
     });
 
+	
     // Drop
     $('.upload-area').on('drop', function (e) {
         e.stopPropagation();
         e.preventDefault();
-
+        
         var file = e.originalEvent.dataTransfer.files;
         var fd = new FormData();
         fd.append('file', file[0]);
+    
+        var doc = file[0].name.slice(0, -4);//para quitar el .dbw
+        document.getElementById("docs-title").setAttribute('value',doc);
         uploadData(fd);
+         
+       
     });
 
     // Open file selector on div click
@@ -163,6 +177,7 @@ function dataExist(){
     $("#file").change(function(){
         var fd = new FormData();
         var files = $('#file')[0].files[0];
+        
         fd.append('file',files);
         uploadData(fd);
     });

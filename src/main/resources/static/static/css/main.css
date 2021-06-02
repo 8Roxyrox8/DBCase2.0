@@ -7,6 +7,10 @@
 }
 
 @font-face {
+  font-family: Montserrat-Thin;
+  src: url('../fonts/montserrat/Montserrat-Thin.ttf'); 
+}
+@font-face {
   font-family: Montserrat-ExtraBold;
   src: url('../fonts/montserrat/Montserrat-ExtraBold.ttf'); 
 }
@@ -20,6 +24,7 @@
 [ RESTYLE TAG ]*/
 
 * {
+	
 	margin: 0px; 
 	padding: 0px; 
 	box-sizing: border-box;
@@ -29,15 +34,34 @@ body, html {
 	height: 100%;
 }
 
-.when-dark{
-	color:#f8f9fa !important;
+.when-dark:a{
+	color:#FFFFFF ;
 }
 
+/*agregado*/
+.when-dark:button:hover{
+	color:#41BF52 !important;
+}
+
+/*agregado*/
+.btn-dark:hover{
+	color:#41BF52 ;
+}
+.when-dark{
+	color:#f8f9fa !important;
+	/*color:#41BF52 !important;*/
+	
+}
+
+
 .when-dark:hover{
-	color:#343a40 !important;
+	color:#41BF52 !important;
 	text-decoration: none !important;
 	background-color: #f8f9fa !important;
 }
+
+
+
 
 .when-white:hover{
 	color:#f8f9fa !important;
@@ -46,6 +70,11 @@ body, html {
 }
 
 /*---------------------------------------------*/
+/*agregado*/
+
+a.text-light:focus, a.text-light:hover {
+    color: #41BF52 !important;
+}
 a {
 	font-size: 14px;
 	line-height: 1.7;
@@ -64,6 +93,7 @@ a:focus {
 /*---------------------------------------------*/
 h1,h2,h3,h4,h5,h6 {
 	margin: 0px;
+	color: #666666;
 }
 
 p {
@@ -123,6 +153,7 @@ button {
 
 button:hover {
 	cursor: pointer;
+	color : #41BF52;
 }
 
 iframe {
@@ -506,6 +537,7 @@ iframe {
 
 .text-white.active {
     color: black !important;
+     
 }
 
 .list-group-item{
@@ -513,7 +545,8 @@ iframe {
 }
 
 .border-top, .border-left, .border-right, .border-bottom{
-	border-width:3px !important;
+	border-width:3px  !important;
+	border-color:#41BF52  !important;/*cambiado*/
 }
 
 a[aria-expanded="true"] {
@@ -522,4 +555,78 @@ a[aria-expanded="true"] {
 
 .dropdown-menu{
 	z-index: 1000000 !important;
+}
+
+/*************************vis-network***************/
+#diagram{
+	color : yellow;
+}
+
+/*******************new document*******/
+
+.doc-custom input{
+font-size : auto;
+ border: 2px solid #41BF52;
+  border-radius: 4px;
+width : 150px;
+height : 20px; 
+}
+.doc-custom input:focus{
+font-size : auto;
+ border: 2px solid #41BF52;
+  border-radius: 4px;
+width : 150px;
+height : 20px; 
+background: #BDBDBD;
+}
+
+.doc-custom .border{
+	height: calc(100% - 20px);
+	content:"";
+	width: 100%;
+	height: 100%;
+	position:absolute;
+	left:0;
+	bottom:0;
+	border-radius:3px;
+}
+.doc-custom .border::before{
+	content:"";
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+	position:absolute;
+	left:0;
+	bottom:0;
+	border-radius:3px;
+	border-bottom:2px solid #222;
+	border-right:2px solid #222;
+	transition:
+width 0.3s ease,
+height 0.3s ease;
+
+}
+.doc-custom input:valid~ .border:before,
+.doc-custom input:focus~ .border:before,
+.doc-custom input:valid~ .after,
+.doc-custom input:focus~ .border:after{
+width: 100%;
+height: 100%;
+border-width: 2px;
+}
+.doc-custom input:valid~ .border:before,
+.doc-custom input:focus~ .border:before
+{
+	transition:
+width 0.3s ease,
+height 0.3s ease;
+
+}
+.doc-custom input:valid ~ .border:after,
+.doc-custom input:focus ~ .border:after
+{
+	transition:
+width 0.3s ease,
+height 0.3s ease;
+
 }

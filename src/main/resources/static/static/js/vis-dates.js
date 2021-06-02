@@ -24,7 +24,12 @@ var data = {
 
 var options = {
 		
-		 edges: {
+		 edges: {      
+			 //font: '22px arial #13A20E',
+			 font: {
+			      color: '#13A20E',
+			      //size: 14px, // px
+			      face: 'arial'},
 		    smooth: {
 		      type: "continuous",
 		      forceDirection: "none",
@@ -33,12 +38,13 @@ var options = {
 		  },
 		  nodes: {
 			  borderWidthSelected:0,
+			  font: '12px arial #000000',//cambiado
 			 color: {
 				 border: '#000000', 
 				 background:'#ffcc45', 
 				 highlight: {
 				        border: '#000000',
-				        background: '#ffce4d'
+				        background: '#FFFF00'
 				      },
 				 hover: {
 					 border: '#ffcc45',
@@ -121,17 +127,17 @@ var network_super = new vis.Network(container_super, data_super, options);
 	  if(nodes_super.get().length<5)
 		  size_width = 45;
 	  var ctx = c.getContext("2d");
-	  var img_super = ctx.canvas.toDataURL('image/png', 1.0);
-	  nodes.add({id: 9999999, label: labelName, shape: 'image', font: {color: '#2aba06'}, image: img_super, size: size_width, borderWidth: 3, color: {
+	  var img_super = ctx.canvas.toDataURL('image/png', 1.0);//  2aba06 cambiado
+	  nodes.add({id: 9999999, label: labelName, shape: 'image', image: img_super, size: size_width, borderWidth: 3,color: {
 			 border: '#000000', 
 			 background:'#fafafa',
 			 highlight: {
 			        border: '#000000',
-			        background: '#fafafa'
+			        background: '#FFFF00'
 			      },
 			 hover: {
-				 border: '#ffcc45',
-				 background: '#fafafa'
+				 border: '#000000',
+				 background: '#FFFF00'
 					 }
 	  }, shapeProperties: { useBorderWithImage:true} });  
   }
@@ -187,17 +193,17 @@ var network_super = new vis.Network(container_super, data_super, options);
 			  bottom = nod.y;
 		  }
 	  });
-	  console.log(left+" "+right+" "+ top+" "+bottom);
+	 // console.log(left+" "+right+" "+ top+" "+bottom);
 	  var width_super = right - left;
 	  var height_super = top - bottom;
 	  width_super = Math.abs(width_super);
 	  height_super = Math.abs(height_super)+50;
-	  console.log(width_super+" width_super");
-	  console.log(height_super+" height_super");
+	 // console.log(width_super+" width_super");
+	 // console.log(height_super+" height_super");
 	  var widthTotal = (width_super+50);
 	  var heightTotal = ((height_super*(width_super+50))/width_super);
-	  console.log(widthTotal+" widthTotal");
-	  console.log(heightTotal+" heightTotal");
+	 // console.log(widthTotal+" widthTotal");
+	  //console.log(heightTotal+" heightTotal");
 	  document.getElementsByTagName("canvas")[0].style.width = widthTotal+"px";
 	  document.getElementsByTagName("canvas")[0].style.height = heightTotal+"px";
   }
@@ -266,7 +272,7 @@ var network_super = new vis.Network(container_super, data_super, options);
   
   function addEntity(nombre, weakEntity,action, idSelected, elementWithRelation, relationEntity){
 	  var id_node = getIdElement();
-	  var data_element = {widthConstraint:{ minimum: 100, maximum: 200}, super_entity:false, label: nombre, isWeak: weakEntity, shape: 'box', scale:10, heightConstraint:25,physics:false};
+	  var data_element = {widthConstraint:{ minimum: 100, maximum: 200}, super_entity:false, label: nombre, isWeak: weakEntity, shape: 'box', scale:10, heightConstraint:25,physics:false};//cambiado
 	  if(action == "edit"){
 		  data_element.id = parseInt(idSelected);
 		  nodes.update(data_element);
@@ -311,7 +317,15 @@ var network_super = new vis.Network(container_super, data_super, options);
 	  if (nombre.length>5){
 		  tam = 30+(nombre.length-5);
 	  }
-	  var data_element = {size:tam,label: nombre, shape: 'diamond', super_entity:false, color:'#ff554b', scale:20, physics:false};
+	  var data_element = {size:tam,label: nombre, shape: 'diamond', super_entity:false,
+		  color: {
+				 border: '#575656', 
+				 background:'#FF3F20',
+				 highlight: {
+				        border: '#000000',
+				        background: '#FF2121'
+				      }}
+		  , scale:20, physics:false};//D5FF04  cambiado(ff554b)
 	  
 	  if(action == "edit"){
 		  data_element.id = parseInt(idSelected);
@@ -336,8 +350,8 @@ var network_super = new vis.Network(container_super, data_super, options);
   }
   
   function addIsA(){
-	  var id_node = getIdElement();
-	  var data_element = {id: id_node++, label: 'IsA', shape: 'triangleDown', super_entity:false, color:'#ff554b', scale:20, physics:false}
+	  var id_node = getIdElement();//FF952A   (ff554b) viejo cambiado
+	  var data_element = {id: id_node++, label: 'IsA', shape: 'triangleDown', super_entity:false, color:'#FF952A', scale:20, physics:false}
 	  if(poscSelection != null){
 		  data_element.x = poscSelection.x;
 		  data_element.y = poscSelection.y;
@@ -359,7 +373,15 @@ var network_super = new vis.Network(container_super, data_super, options);
 	  }
 	  var valueEntityWeak = nodes.get(parseInt(idEntity)).isWeak;
 	  
-	  var data_element = {widthConstraint:{ minimum: 50, maximum: 160},labelBackend:name, super_entity:false, label: word_pk, dataAttribute:{entityWeak: valueEntityWeak, primaryKey: pk, composite: comp, notNull: notNll, unique: uniq, multivalued: multi, domain: dom, size: sz}, shape: 'ellipse', color:'#4de4fc', scale:20, heightConstraint:23,physics:false};
+	  var data_element = {width: 3,widthConstraint:{ minimum: 50, maximum: 160},labelBackend:name, super_entity:false, label: word_pk, dataAttribute:{entityWeak: valueEntityWeak, primaryKey: pk, composite: comp, notNull: notNll, unique: uniq, multivalued: multi, domain: dom, size: sz}, shape: 'ellipse',
+			  color: {
+					 border: '#000000', 
+					 background:'#22bdb1',
+					 highlight: {
+					        border: '#000000',
+					        background: '#4de4fc'
+					      }}
+			 /*'#4de4fc' cambiado*/, scale:20, heightConstraint:23,physics:false};
 	  if(action == "edit"){
 		  data_element.id = parseInt(idSelected);
 		  data_element.dataAttribute.entityWeak = nodes.get(parseInt(idSelected)).dataAttribute.entityWeak;
@@ -371,7 +393,7 @@ var network_super = new vis.Network(container_super, data_super, options);
 		  }
 		  data_element.id = id_node++;
 		  nodes.add(data_element);
-		  edges.add({from: parseInt(idEntity), to: parseInt(id_node)-1, color:{color:'blue'}});
+		  edges.add({from: parseInt(idEntity), to: parseInt(id_node)-1, color:{color:'#22bdb1'},width: 2});//cambiado
 	  }
 	  updateTableElements();
   }
@@ -415,17 +437,17 @@ var network_super = new vis.Network(container_super, data_super, options);
 		  center = roleName;
 	  
 	  if(partActive){
-		  labelText = minCardinality+" .. "+maxCardinality+" "+center;
+		  labelText = minCardinality+"  ..  "+maxCardinality+" "+center;
 	  }else{
 		  labelText = center;
-	  }
+	  } 	
 	  var idEdge = existEdge(idSelected, idTo);
-	  var data_element = {from: parseInt(idSelected), to: parseInt(idTo), label: labelText, labelFrom:right, labelTo:left, name:center, participation:partActive ,participationFrom: minCardinality, participationTo: maxCardinality, state: "false", smooth:false, arrows:{to: { enabled: direct1 }}};
-	  var data_element1 = {from: parseInt(idSelected), to: parseInt(idTo), label: labelText, labelFrom:right, labelTo:left, name:center, participation:partActive ,participationFrom: minCardinality, participationTo: maxCardinality, state: "false", smooth:false, arrows:{to: { enabled: direct1 }}};
+	  var data_element = {width: 3,from: parseInt(idSelected), to: parseInt(idTo), label: labelText, labelFrom:right, labelTo:left, name:center, participation:partActive ,participationFrom: minCardinality, participationTo: maxCardinality, state: "false", smooth:false,arrows:{to: { enabled: direct1 }}};//cambio sin exito
+	  var data_element1 = {width: 3,from: parseInt(idSelected), to: parseInt(idTo), label: labelText, labelFrom:right, labelTo:left, name:center, participation:partActive ,participationFrom: minCardinality, participationTo: maxCardinality, state: "false", smooth:false ,arrows:{to: { enabled: direct1 }}};//cambio sin exito si agrego conf de font se va al lateral 
 	  var data_element_update = {};
 	  
 	  if(action == "edit"){
-		  var data_element3 = {label: labelText, labelFrom:right, labelTo:left, name:center, participation:partActive ,participationFrom: minCardinality, participationTo: maxCardinality, smooth:false, arrows:{to: { enabled: direct1 }}};
+		  var data_element3 = {width: 3,label: labelText, labelFrom:right, labelTo:left, name:center, participation:partActive ,participationFrom: minCardinality, participationTo: maxCardinality, smooth:false, arrows:{to: { enabled: direct1 }}};
 		  data_element3.id = element_role;
 		  edges.update(data_element3);
 	  }else{
@@ -450,7 +472,7 @@ var network_super = new vis.Network(container_super, data_super, options);
    */
   function addEntityParent(idTo, action, idSelected){
 	  var idParent = nodes.get(parseInt(idSelected)).parent;
-	  var data_element = {from: parseInt(idSelected), to: parseInt(idTo),type:"parent", arrows: 
+	  var data_element = {width: 3,from: parseInt(idSelected), to: parseInt(idTo),type:"parent", arrows: 
 	  						{from: { enabled: true }, middle: { enabled: false },to: { enabled: false }
 	  						}
 	  					};

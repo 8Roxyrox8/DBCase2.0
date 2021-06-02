@@ -149,6 +149,7 @@ $(document).ready(function () {
 
        	 	$('#btnTest').on('click', function () {
          		  //var url = "<c:url value="/generateData"/>";
+       	 		
        		  	var f= 2;
 				var myObj = {}; 
 				 
@@ -194,18 +195,23 @@ $(document).ready(function () {
 				}
 				
 				var edgesData = edges.get();
+			
 				for(var i = 0;i<edgesData.length;i++){
 					if(edgesData[i].participation){
-						edgesData[i].labelFrom = edgesData[3].participationFrom;
-						edgesData[i].labelTo = edgesData[3].participationTo;
+						//cambiado no entiendo el porque de copiar del edge 3 
+					//	console.log(edgesData[3]);
+					//	edgesData[i].labelFrom = edgesData[3].participationFrom;
+					//	edgesData[i].labelTo = edgesData[3].participationTo;
 					}
 						
 					var tempLabel = edgesData[i].label;
+					
 					if(edgesData[i].label){
 						edgesData[i].label = normalize(edgesData[i].label);
 					}  
 					var nameLabel = edgesData[i].label;
 					traduct[nameLabel] = tempLabel;
+					//console.log(nameLabel);
 					
 					var tempName = edgesData[i].name;
 					if(edgesData[i].name){
@@ -225,8 +231,9 @@ $(document).ready(function () {
 				var edgesSuperData = edges_super.get();
 				for(var i = 0;i<edgesSuperData.length;i++){
 					if(edgesSuperData[i].participation){
-						edgesSuperData[i].labelFrom = edgesSuperData[3].participationFrom;
-						edgesSuperData[i].labelTo = edgesSuperData[3].participationTo;
+						//cambiado
+					//	edgesSuperData[i].labelFrom = edgesSuperData[3].participationFrom;
+					//	edgesSuperData[i].labelTo = edgesSuperData[3].participationTo;
 					}
 					var tempLabel = edgesSuperData[i].label;
 					if(edgesData[i].label){
@@ -249,7 +256,7 @@ $(document).ready(function () {
 				myObj["data3"] = JSON.stringify(nodesSuper); 
 				myObj["data4"] = JSON.stringify(edgesSuperData); 
 				var json = JSON.stringify(myObj);
-
+				//console.log(json);
 				$.ajax({
 					type: 'POST',
 					url: '/generateData',
@@ -269,9 +276,11 @@ $(document).ready(function () {
 						data = data.replace(/\*\*/g, "*");
 						data = data.replace(/agregacion/g, agregation);
 						//data = data.replace(/\_/g, " ");
+						//console.log(data);
 						$("#testResult").html(data);
 					},
 					error: function (xhr, ajaxOptions, thrownError) {
+						console.log("erro:"+edgesData);
 						console.log(xhr.status);
 						console.log(xhr.responseText);
 						console.log(thrownError);

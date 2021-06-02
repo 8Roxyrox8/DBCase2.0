@@ -2190,13 +2190,15 @@ fieldset[disabled] a.btn {
 }
 
 .btn-dark:hover {
-  color: #fff;
-  background-color: #23272b;
-  border-color: #1d2124;
+  color:#41BF52 !important;
+  	background-color: #f8f9fa ;
+ /* background-color: #23272b;*/
+  border-color:#41BF52;/* #1d2124;*/
 }
 
 .btn-dark:focus, .btn-dark.focus {
   box-shadow: 0 0 0 3px rgba(52, 58, 64, 0.5);
+  color:#41BF52 ;
 }
 
 .btn-dark.disabled, .btn-dark:disabled {
@@ -5301,9 +5303,9 @@ a.bg-dark:focus, a.bg-dark:hover {
 .bg-transparent {
   background-color: transparent !important;
 }
-
+/*cambiado*/
 .border {
-  border: 1px solid #e9ecef !important;
+  border: 1px solid #28a745 !important;
 }
 
 .border-0 {
@@ -5351,7 +5353,7 @@ a.bg-dark:focus, a.bg-dark:hover {
 }
 
 .border-light {
-  border-color: #f8f9fa !important;
+  border-color:#41BF52  ;
 }
 
 .border-dark {
@@ -5359,7 +5361,7 @@ a.bg-dark:focus, a.bg-dark:hover {
 }
 
 .border-white {
-  border-color: #fff !important;
+  border-color: #41BF52 !important;
 }
 
 .rounded {
@@ -8149,6 +8151,9 @@ a.text-danger:focus, a.text-danger:hover {
 
 .text-light {
   color: #f8f9fa !important;
+}
+h4.text-light {
+  color:  #41BF52 ;
 }
 
 a.text-light:focus, a.text-light:hover {

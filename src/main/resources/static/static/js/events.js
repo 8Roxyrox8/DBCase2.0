@@ -248,6 +248,8 @@ function restartPanel(){
 }
 
 function updateTableElements(){
+	$("#resultSPhysicalSchema").text("");//limpia el panel del esquema fisico
+	$("#testResult").text("");//limpia el panel del esquema logico
 	$('#accordion').html("");
 	var nodo = getAllNodes(["box", "image"]);
 	for(var i=0;i<nodo.length;i++){
@@ -268,6 +270,7 @@ function updateTableElements(){
 				$('#childs-attribute'+nodo[i].id).append('<p class="card-link small ml-0" href="#" aria-expanded="true"><img src="static/images/attribute-small.png" class="rounded"><span class="pl-1 text-'+$("#textTheme").text()+'">'+listAtributes[e].label+' : '+listAtributes[e].type+'('+listAtributes[e].size+')</span></p>');
 			}
 		}
+		
 	}
 	
 	$('#accordion2').html("");
@@ -507,8 +510,8 @@ function updateTableElements(){
 			doc.text(170, 12, "DBCASE Web");
 			doc.addImage(dataURL, 'PNG', 15, 40, 180, 160);
 			console.log("siuuuu");
-			saveAs(doc.output('blob'), $('#idText').text()+""+(new Date().getMilliseconds())+".pdf");
-			//doc.save( $('#idText').text()+""+(new Date().getMilliseconds())+'.pdf');
+			//saveAs(doc.output('blob'), $('#idText').text()+""+(new Date().getMilliseconds())+".pdf");
+			saveAs(doc.output('blob'), document.getElementById("docs-title").value+".pdf");
 		});
 	});
 
@@ -530,7 +533,9 @@ function updateTableElements(){
 			res = res.replace(/\*/g, "");
 			res = "#"+$("#textGeneratedBy").text()+"\r\n"+res;
 			var blob = new Blob([res], {type: "text/plain;charset=utf-8"});
-			saveAs(blob, $('#idText').text()+""+(new Date().getMilliseconds())+".sql");
+			//saveAs(blob, $('#idText').text()+""+(new Date().getMilliseconds())+".sql");
+			saveAs(blob,document.getElementById("docs-title").value+".sql");
+			
 		}
 	});
 	
@@ -550,7 +555,8 @@ function updateTableElements(){
 			res = res.replace(/&gt;/g, ">");
 			res = "#"+$("#textGeneratedBy").text()+"\r\n"+res;
 			var blob = new Blob([res], {type: "text/plain;charset=utf-8"});
-			saveAs(blob, $('#idText').text()+""+(new Date().getMilliseconds())+".txt");
+			//cambiar nombre documento
+			saveAs(blob,document.getElementById("docs-title").value+".txt");
 		}
 	});
 	

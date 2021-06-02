@@ -39,6 +39,7 @@ a:focus {
     margin: 40px 0;
 }
 
+
 /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */
@@ -87,13 +88,15 @@ a:focus {
 }
 
 #sidebar ul li a:hover {
-    color: #7386D5;
+  /*  color: #7386D5;*/
+  
     background: #fff;
 }
 
 #sidebar ul li.active>a,
 a[aria-expanded="true"] {
     color: #fff;
+   
     background: #6d7fcc;
 }
 

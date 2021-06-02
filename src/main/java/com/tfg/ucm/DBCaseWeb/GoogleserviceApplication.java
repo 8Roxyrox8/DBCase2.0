@@ -21,6 +21,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,6 +55,7 @@ import modelo.transfers.TransferRelacion;
 import modelo.conectorDBMS.FactoriaConectores;
 import java.util.UUID;
 
+@Controller
 @SpringBootApplication
 @RestController
 public class GoogleserviceApplication {
@@ -107,7 +109,7 @@ public class GoogleserviceApplication {
 	   ModelAndView mav = new ModelAndView();
 	   if(principal != null) {
 		   mav.setViewName("inicio");
-		   model.addAttribute("perfil", principal);
+		   model.addAttribute("perfil", principal); 	
 	   }
 		else
 		   mav.setViewName("index");
@@ -373,7 +375,11 @@ public class GoogleserviceApplication {
 			nodes = gson.fromJson(r.getData1(), tipoNode);
 			edges = gson.fromJson(r.getData2(), tipoEdge);
 		} 
-		//LLAMAMOS 2 VECES AL GENERATEESQUEMA, LA PRIMERA DE ELLAS CON LA INFORMACION DE LA AGREAGACION YLA SEGUNDA DE ELLA CON LOS ELEMENTOS EXTERNOS A ESTA AGREGACION, RECORDAR QUE SE MANEJA EL MISMO CONTROLADOR POR TANTO LOS OBJETOS QUE SE CREAN EN AMBAS LLAMAS SE MANTIENEN PERSISTENTES EN LA EJECUCIÓN.
+		//LLAMAMOS 2 VECES AL GENERATEESQUEMA, LA PRIMERA DE ELLAS CON LA
+		//INFORMACION DE LA AGREAGACION YLA SEGUNDA DE ELLA CON LOS ELEMENTOS 
+		//EXTERNOS A ESTA AGREGACION, RECORDAR QUE SE MANEJA EL MISMO CONTROLADOR
+		//POR TANTO LOS OBJETOS QUE SE CREAN EN AMBAS LLAMAS SE MANTIENEN PERSISTENTES EN 
+		//LA EJECUCIÓN.
 		generateEsquema(nodes,edges,c,false,mapaAgregacion_nodosNombres);
 		return generateEsquema(nodesAltoNivel,edgesAltoNivel,c,true,mapaAgregacion_nodosNombres) ; 
 	}
@@ -701,7 +707,7 @@ public class GoogleserviceApplication {
 		}
 		//RELACION ENTRE RELACION Y ATRIBUTO NO ESTA CONTEMPLADO
 		else if((dataParseada.get(edges.get(j).getFrom()) instanceof TransferRelacion) && (dataParseada.get(edges.get(j).getTo()) instanceof TransferAtributo)) {
-			//System.out.println("no implementado");
+			System.out.println("no implementado");
 		}
 		//RELACION ENTRE RELACION Y ENTIDAD
 		else if(edges.get(j).getType() == null &&  (dataParseada.get(edges.get(j).getFrom()) instanceof TransferRelacion) && (dataParseada.get(edges.get(j).getTo()) instanceof TransferEntidad)) {
@@ -715,9 +721,18 @@ public class GoogleserviceApplication {
 
 			vData.add(tRelation);
 			vData.add(clon_entidad);
+			if(edges.get(j).getLabelFrom() == null)vData.add("");
+			else {
 			vData.add(edges.get(j).getLabelFrom().toLowerCase());
+			}
+			if(edges.get(j).getLabelTo() == null)vData.add("");
+			else {
 			vData.add(edges.get(j).getLabelTo().toLowerCase());
+			}
+			if(edges.get(j).getLabel()== null)vData.add(" ");
+			else {
 			vData.add(edges.get(j).getLabel());
+			}
 
 			c.mensajeDesde_GUI(TC.GUIAnadirEntidadARelacion_ClickBotonAnadir, vData);
 		}

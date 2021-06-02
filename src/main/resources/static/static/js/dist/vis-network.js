@@ -7189,7 +7189,7 @@
 	  var _context;
 
 	  var options = {
-	    edges: {
+	   edges:{
 	      inheritColor: false
 	    },
 	    nodes: {
@@ -25425,7 +25425,7 @@
 	    this.body = body;
 	    this.pointToSelf = false;
 	    this.baseSize = undefined;
-	    this.fontOptions = {}; // instance variable containing the *instance-local* font options
+	    this.fontOptions = {}; //instance variable containing the *instance-local* font options
 
 	    this.setOptions(options);
 	    this.size = {
@@ -25828,6 +25828,7 @@
 	  }, {
 	    key: "draw",
 	    value: function draw(ctx, x, y, selected, hover) {
+	    	 ctx.font ="20px";
 	      var baseline = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 'middle';
 	      // if no label, return
 	      if (this.elementOptions.label === undefined) return; // check if we have to render the label
@@ -25913,49 +25914,57 @@
 	          for (var j = 0; j < line.blocks.length; j++) {	        	  
 	        	if(this.isEdgeLabel){
 		            var block = line.blocks[j];
-		            ctx.font = block.font;
-	
+		            //comentado
+		            ctx.font = "normal 18px Times New Roman";
+		            //ctx.fillStyle = '#27CD6F';
+		            
 		            var _this$_getColor = this._getColor(block.color, viewFontSize, block.strokeColor),
 		                _this$_getColor2 = slicedToArray(_this$_getColor, 2),
-		                fontColor = _this$_getColor2[0],
-		                strokeColor = _this$_getColor2[1];
-	
+		               // fontColor ='#28a745'; //_this$_getColor2[0];//,
+		                strokeColor = '#28a745'//_this$_getColor2[1];
+		              
 		            if (block.strokeWidth > 0) {
 		              ctx.lineWidth = block.strokeWidth;
-		              ctx.strokeStyle = strokeColor;
+		             ctx.strokeStyle = strokeColor;
 		              ctx.lineJoin = 'round';
 		            }
-		            ctx.strokeStyle = "green";
+		            //ctx.strokeStyle = "#28a745";
+		           // ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
+		            //ctx.strokeStyle = '#268D3E';//comenatdo
+		            //ctx.strokeStyle = "#FFBE00";//cambiado
+		            ctx.fillStyle ='#28a745';// '#268D3E';//agregado
 		            if (block.strokeWidth > 0) {
 		            	if(this.elementOptions.state == "left" || this.elementOptions.state == "right"){
 		            		if(this.elementOptions.state == "left"){
-		            			ctx.fillStyle = 'green';
+		            		//	ctx.fillStyle = 'yellow';//cambiado
 		            			ctx.strokeText(block.text, x + width+45, y + block.vadjust);
 		            		}
 		      	    	  	if(this.elementOptions.state == "right"){
-		      	    	  		ctx.fillStyle = 'green';
+		      	    	  	//CAMBIADO	ctx.fillStyle = 'yellow';//cambiado
 		      	    	  		ctx.strokeText(block.text, x + width-30, y + block.vadjust);
 		      	    	  	}
 		            	}else{
-		            		ctx.fillStyle = 'green';
+		            		//ctx.fillStyle = 'red';//'#268D3E';//cambiado
 		            		ctx.strokeText(block.text, x + width, y + block.vadjust);
 		      	      	}
 		            }
 	
-		            //ctx.fillText(block.text, x + width, y + block.vadjust);
-		            width += block.width;
+		           //comentado  ctx.fillText(block.text, x + width, y + block.vadjust);
+		           // ctx.fillText(block.text, x, y);
+		           // width += block.width;
 	          	}else{
 	          		var block = line.blocks[j];
-		            ctx.font = block.font;
-	
+	          		 ctx.font = block.font;
+	          		//ctx.font ="14px Montserrat-Regular";//block.font;
+	          		// ctx.font ="20px";
 		            var _this$_getColor = this._getColor(block.color, viewFontSize, block.strokeColor),
 		                _this$_getColor2 = slicedToArray(_this$_getColor, 2),
 		                fontColor = _this$_getColor2[0],
-		                strokeColor = _this$_getColor2[1];
-	
+		              strokeColor = _this$_getColor2[1];
+		            
 		            if (block.strokeWidth > 0) {
 		              ctx.lineWidth = block.strokeWidth;
-		              ctx.strokeStyle = strokeColor;
+		           ctx.strokeStyle = strokeColor;
 		              ctx.lineJoin = 'round';
 		            }
 	
@@ -25964,7 +25973,7 @@
 		              ctx.strokeText(block.text, x + width, y + block.vadjust);
 		            }
 	
-		            ctx.fillText(block.text, x + width, y + block.vadjust);
+		             ctx.fillText(block.text, x + width, y + block.vadjust);
 		            width += block.width;
 	          	}
 	          }
@@ -26023,15 +26032,16 @@
 	    key: "_getColor",
 	    value: function _getColor(color, viewFontSize, initialStrokeColor) {
 	      var fontColor = color || '#000000';
-	      var strokeColor = initialStrokeColor || '#ffffff';
-
+	   //CAMBIADO   var strokeColor = initialStrokeColor || '#1CBA46';
+	      var fillcolor = initialStrokeColor || '#1CBA46';//agregado
 	      if (viewFontSize <= this.elementOptions.scaling.label.drawThreshold) {
 	        var opacity = Math.max(0, Math.min(1, 1 - (this.elementOptions.scaling.label.drawThreshold - viewFontSize)));
 	        fontColor = overrideOpacity(fontColor, opacity);
-	        strokeColor = overrideOpacity(strokeColor, opacity);
+	       // strokeColor = overrideOpacity(strokeColor, opacity);
+	        fillcolor = overrideOpacity(fillcolor, opacity);
 	      }
 
-	      return [fontColor, strokeColor];
+	      return [fontColor,fillcolor]; //cambiado return [fontColor, strokeColor];
 	    }
 	    /**
 	     *
@@ -26167,7 +26177,7 @@
 
 	      if (selected || hover) {
 	        if (mod === "normal" && this.fontOptions.chooser === true && this.elementOptions.labelHighlightBold) {
-	          values.mod = 'bold';
+	          values.mod = 'normal';//cambiado bold
 	        } else {
 	          if (typeof this.fontOptions.chooser === 'function') {
 	            this.fontOptions.chooser(values, this.elementOptions.id, selected, hover);
@@ -27941,7 +27951,7 @@
 	        } // setup the line properties.
 
 
-	        ctx.strokeStyle = strokeStyle; // set a fillstyle
+	       //comentado ctx.strokeStyle = strokeStyle; // set a fillstyle
 
 	        ctx.fillStyle = fillStyle; // draw a rectangle to form the border around. This rectangle is filled so the opacity of a picture (in future vis releases?) can be used to tint the image
 
@@ -30338,7 +30348,7 @@
 			    	  }
 	    		  }
 	    	  }
-	    	  if(edgeOption.options.state == "right"){
+	    	  if(edgeOption.options.state == "right"){//ajuste de flechas
 	    		  if(grad>45){
 	    			  var x = arrowData.point.x-30;
 	    		      var y = arrowData.point.y;
@@ -32643,7 +32653,7 @@
 	      var hipo = Math.sqrt(calculo1+calculo2);
 	      var sen = Math.sin(cat2/hipo);
 	      var grad = Math.asin(sen) * (180/Math.PI);
-	      
+	      console.log(this);//agregado
 	      if(this.options.state == "left" || this.options.state == "right"){
 	      
 	    	  if(this.options.state == "left"){
@@ -38743,8 +38753,8 @@
 
 	      if (!this.frame.canvas.getContext) {
 	        var noCanvas = document.createElement('DIV');
-	        noCanvas.style.color = 'red';
-	        noCanvas.style.fontWeight = 'bold';
+	        noCanvas.style.color = 'green';
+	      //cambiado  noCanvas.style.fontWeight = 'bold';
 	        noCanvas.style.padding = '10px';
 	        noCanvas.innerHTML = 'Error: your browser does not support HTML canvas';
 	        this.frame.canvas.appendChild(noCanvas);
@@ -47281,8 +47291,8 @@
 
 	      if (!this.colorPickerCanvas.getContext) {
 	        var noCanvas = document.createElement('DIV');
-	        noCanvas.style.color = 'red';
-	        noCanvas.style.fontWeight = 'bold';
+	        noCanvas.style.color = 'green';
+	       //cambiado noCanvas.style.fontWeight = 'bold';
 	        noCanvas.style.padding = '10px';
 	        noCanvas.innerHTML = 'Error: your browser does not support HTML canvas';
 	        this.colorPickerCanvas.appendChild(noCanvas);
@@ -49697,18 +49707,18 @@
 	      y: false
 	    },
 	    font: {
-	      color: ['color', '#343434'],
+	    //CAMBIADO  color: ['color', '#343434'],
 	      size: [14, 0, 100, 1],
 	      // px
 	      face: ['arial', 'verdana', 'tahoma'],
 	      background: ['color', 'none'],
-	      strokeWidth: [0, 0, 50, 1],
+	     //comentado strokeWidth: [0, 0, 50, 1],
 	      // px
-	      strokeColor: ['color', '#ffffff']
+	     //CAMBIADO strokeColor: ['color', '#E9E20D']//'#ffffff']
 	    },
 	    //group: 'string',
 	    hidden: false,
-	    labelHighlightBold: true,
+	    labelHighlightBold: false ,//cambiado
 	    //icon: {
 	    //  face: 'string',  //'FontAwesome',
 	    //  code: 'string',  //'\uf007',
@@ -49772,19 +49782,19 @@
 	    },
 	    dashes: false,
 	    font: {
-	      color: ['color', '#343434'],
+	     //CAMBIADO color: ['color', '#343434'],
 	      size: [14, 0, 100, 1],
 	      // px
 	      face: ['arial', 'verdana', 'tahoma'],
 	      background: ['color', 'none'],
-	      strokeWidth: [2, 0, 50, 1],
+	      //comentado strokeWidth: [2, 0, 50, 1],
 	      // px
-	      strokeColor: ['color', '#ffffff'],
+	      //CAMBIADO strokeColor: ['color', '#1CBA46'],//'#ffffff'],
 	      align: ['horizontal', 'top', 'middle', 'bottom']
 	    },
 	    hidden: false,
 	    hoverWidth: [1.5, 0, 5, 0.1],
-	    labelHighlightBold: true,
+	    labelHighlightBold:false,//cambiado true,
 	    physics: true,
 	    scaling: {
 	      min: [1, 0, 100, 1],
