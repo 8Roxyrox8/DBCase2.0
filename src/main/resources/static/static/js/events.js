@@ -32,6 +32,7 @@ function inArray2(needle, haystack) {
 }
 
 function editList(){
+
 	$("#addListUnique").click(function(){
 		var nodo = allAttributeOfEntity(parseInt($("#idSelected").val()));
 		var nextValue = parseInt($("#totalInputs").val())+1;
@@ -43,6 +44,7 @@ function editList(){
   		$("#totalInputs").val(nextValue);
 		$("#inputList").append($('#templateSelectTableUnique').tmpl(dataType));
 		$('.select-multiple').select2();
+
 	});
 
 	 $(document).on( 'click', '.removeList', function(){
@@ -72,34 +74,105 @@ function eventAddSuperEntity(){
 }
 
 function eventsEntityToRelation(){
-	$("#element, #roleName").change(function(){
+
+	$("#element,#element_role, #roleName, #max1,#parcial, #total, #maxN").change(function(){
 		var idF = $("#element").val();
 		var idT = $("#idSelected").val();
 		var idEdge = existEdge(idF, idT);
+		//console.log(idEdge);
 		if(idEdge){
-			if($("#roleName").val() == ""){
+			if($("#roleName").val() == "" && $("#typeAction").val()== 'create'){
 				$("#insertModal").prop("disabled", true);
 				if($("#textWarning").length == 0){
+
 					$("#roleName").after("<span id='textWarning' class='text-warning'>"+$("#textNecesaryRol").text()+"</span>")
 				}
 			}else{
 				$("#insertModal").prop("disabled", false);
+
 			}
 		}else{
 			$("#insertModal").prop("disabled", false);
+			$("#roleName").val("");
 		}
 	});
-	
+	$("#maxCardinality").blur(function(){
+		if($("#minCardinality").val() != "" && $("#maxCardinality").val() == ""){
+			$("#maxCardinality").val('N');
+		}
+	});
+	$("#minCardinality").blur(function(){
+		if($("#minCardinality").val() == "" && $("#maxCardinality").val() != ""){
+			if($("#total").prop('checked')) {
+				$("#minCardinality").val('1');
+			}
+		}
+	});
 	$( "#minMax" ).click(function(){
 		if($("#minMax").prop('checked')){
 			$("#minCardinality").prop("disabled", false);
 			$("#maxCardinality").prop("disabled", false);
+			if($("#parcial").prop('checked')) {
+				$("#minCardinality").val(0);
+				$("#maxCardinality").val('N');
+				$("#minCardinality").prop("disabled", true);
+			}
         }else{
+			$("#minCardinality").val("");
+			$("#maxCardinality").val("");
         	$("#minCardinality").prop("disabled", true);
 			$("#maxCardinality").prop("disabled", true);
         }
 	});
-	
+	$( "#parcial" ).click(function(){
+		if($("#parcial").prop('checked')) {
+			if($("#minMax").prop('checked')){
+				$("#minCardinality").val(0);
+				$("#maxCardinality").val('N');
+				$("#minCardinality").prop("disabled", true);
+			}else{
+				$("#minCardinality").val("");
+				$("#maxCardinality").val("");
+			}
+		}
+	});
+	$( "#total" ).click(function(){
+		if($("#minCardinality").val()!= " ") {
+			$("#minMax").prop( "checked", true );
+			$("#minCardinality").prop("disabled", false);
+			$("#maxCardinality").prop("disabled", false);
+			$("#minCardinality").val(1);
+			$("#maxCardinality").val('N');
+		}
+	});
+	$("#roleName").on('keydown', function (e)
+	{
+		try {
+			if (( e.keyCode == 46))
+				return false;
+			else
+				return true;
+		}
+		catch (Exception)
+		{
+			return false;
+		}
+	});
+
+	$('#modalAddItem').on('shown.bs.modal', function (e) {
+		var idF = $("#element").val();
+		var idT = $("#idSelected").val();
+		var idEdge = existEdge(idF, idT);
+		//console.log(idEdge);
+		if(idEdge) {
+			if ($("#roleName").val() == "" && $("#typeAction").val()== 'create') {
+				$("#roleName").val("ROL");
+			}
+		}else if ($("#typeAction").val()== 'create'){
+			$("#roleName").val("");
+		}
+
+	});
 	$('#modalAddItem').on('hidden.bs.modal', function () {
 		$( "#modalAddItem" ).unbind( "shown.bs.modal");
 	});
@@ -463,7 +536,6 @@ function updateTableElements(){
 	$('.insertarDatos').on('click', function() {
 		// Limpiar el modal cuando se cierra, se deshabilita el boton 
 		$('#modalAddItem').on('hidden.bs.modal', function (event) {
-			console.log("clean modal");
 			$('#insertModal').show();
 			$('#insertModal').text($('#textInsert').text());
 			$('#formModal').html("");
@@ -509,9 +581,9 @@ function updateTableElements(){
 			doc.text(10, 12, $('#nameText').text());
 			doc.text(170, 12, "DBCASE Web");
 			doc.addImage(dataURL, 'PNG', 15, 40, 180, 160);
-			console.log("siuuuu");
-			//saveAs(doc.output('blob'), $('#idText').text()+""+(new Date().getMilliseconds())+".pdf");
-			saveAs(doc.output('blob'), document.getElementById("docs-title").value+".pdf");
+
+
+			saveAs(doc.output('blob'), document.getElementById("docs-title").value+"General.pdf");
 		});
 	});
 
@@ -534,7 +606,7 @@ function updateTableElements(){
 			res = "#"+$("#textGeneratedBy").text()+"\r\n"+res;
 			var blob = new Blob([res], {type: "text/plain;charset=utf-8"});
 			//saveAs(blob, $('#idText').text()+""+(new Date().getMilliseconds())+".sql");
-			saveAs(blob,document.getElementById("docs-title").value+".sql");
+			saveAs(blob,document.getElementById("docs-title").value+"Phisic.sql");
 			
 		}
 	});
@@ -556,7 +628,7 @@ function updateTableElements(){
 			res = "#"+$("#textGeneratedBy").text()+"\r\n"+res;
 			var blob = new Blob([res], {type: "text/plain;charset=utf-8"});
 			//cambiar nombre documento
-			saveAs(blob,document.getElementById("docs-title").value+".txt");
+			saveAs(blob,document.getElementById("docs-title").value+"Logic.txt");
 		}
 	});
 	

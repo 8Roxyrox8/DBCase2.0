@@ -25,8 +25,6 @@ function exportNetwork(type) {
     
     if(type != "session"){
     	var blob = new Blob([exportValue], {type: "application/json"});
-		//saveAs(blob, $('#idText').text()+""+(new Date().getMilliseconds())+".dbw");
-    	//var x = document.getElementById("docs-title").value;
 		saveAs(blob, document.getElementById("docs-title").value+""+ ".dbw");//var x = document.getElementById("myForm").elements.namedItem("docs-title").value obtener el valor del input
     }else{
     	sessionStorage.setItem('codeSave', exportValue);
@@ -78,11 +76,7 @@ function uploadData(fd){
         		importNetwork("file", result[1]);
         		$("#textoFileDrag").text(result[1]);
             	$("[aria-label='Close']").click();
-            	
-               // document.getElementById("docs-title").setAttribute('value',files[0].name);
-               
-
-        	}        	
+        	}
         },
         error: function (xhr, ajaxOptions, thrownError) {
         	$("#textoFileDrag").text($("#textFileInvalid").text());
@@ -122,8 +116,6 @@ $(document).ready(function () {
 			dataExist();
 		}   
 	});
-	
-	 // preventing page from redirecting
 });
 
 
@@ -164,8 +156,6 @@ function dataExist(){
         var doc = file[0].name.slice(0, -4);//para quitar el .dbw
         document.getElementById("docs-title").setAttribute('value',doc);
         uploadData(fd);
-         
-       
     });
 
     // Open file selector on div click

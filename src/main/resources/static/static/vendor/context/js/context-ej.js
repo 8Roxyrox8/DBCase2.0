@@ -46,8 +46,10 @@ $(document).ready(function(){
 		}},	
 		// relation
 		{text: $("#textAddEntitytoRelation").text(), href: '#', action: function(e){
+				$( "#typeAction").val("create");
 			$( "[functioninsert='addEntitytoRelation']").click();
 			$('#insertModal').prop('disabled', false);
+
 		}},
 		{text: $("#textRemoveEntitytoRelation").text(), href: '#', action: function(e){
 			$( "[functioninsert='removeEntitytoRelation']").click();
@@ -55,7 +57,10 @@ $(document).ready(function(){
 			$('#insertModal').text($("#textRemove").text());
 		}},
 		{text: $("#textEditCardOrRol").text(), href: '#', action: function(e){
+			$( "#typeAction").val("edit"); //cambiado
 			$( "[functioninsert='addEntitytoRelation']").click();
+
+			$( "#typeAction").val("edit");//cambio agrego aquí
 			$('#insertModal').prop('disabled', false);
 			$('#titleModal').html($('#textEditCardOrRol').text());
 			$('#element_role').removeClass("d-none");
@@ -78,7 +83,7 @@ $(document).ready(function(){
 			});
 			$('#element_role_label').removeClass("d-none");
 			$("#insertModal").text($("#textAccept").text());
-			$( "#typeAction").val("edit");
+
 		}},
 		{text: $("#addNewAttribute").text(), action: function(e){
 			$( "[functioninsert='addAtribute']").click();

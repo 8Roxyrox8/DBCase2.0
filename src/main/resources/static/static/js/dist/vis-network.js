@@ -3483,7 +3483,7 @@
 	function deepObjectAssign() {
 	  var merged = deepObjectAssignNonentry.apply(void 0, arguments);
 	  stripDelete(merged);
-	  console.log(merged);
+	  //console.log(merged);
 	  return merged;
 	}
 	/**
@@ -25921,18 +25921,19 @@
 		            var _this$_getColor = this._getColor(block.color, viewFontSize, block.strokeColor),
 		                _this$_getColor2 = slicedToArray(_this$_getColor, 2),
 		               // fontColor ='#28a745'; //_this$_getColor2[0];//,
-		                strokeColor = '#28a745'//_this$_getColor2[1];
+		                strokeColor = '#28a745';//_this$_getColor2[1];
 		              
 		            if (block.strokeWidth > 0) {
-		              ctx.lineWidth = block.strokeWidth;
+
+		              ctx.lineWidth = 1;
 		             ctx.strokeStyle = strokeColor;
-		              ctx.lineJoin = 'round';
+		              ctx.lineJoin = 'miter';
 		            }
 		            //ctx.strokeStyle = "#28a745";
 		           // ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
 		            //ctx.strokeStyle = '#268D3E';//comenatdo
 		            //ctx.strokeStyle = "#FFBE00";//cambiado
-		            ctx.fillStyle ='#28a745';// '#268D3E';//agregado
+		            //ctx.fillStyle ='#28a745';// '#268D3E';//agregado
 		            if (block.strokeWidth > 0) {
 		            	if(this.elementOptions.state == "left" || this.elementOptions.state == "right"){
 		            		if(this.elementOptions.state == "left"){
@@ -32653,7 +32654,7 @@
 	      var hipo = Math.sqrt(calculo1+calculo2);
 	      var sen = Math.sin(cat2/hipo);
 	      var grad = Math.asin(sen) * (180/Math.PI);
-	      console.log(this);//agregado
+	     // console.log(this);//agregado
 	      if(this.options.state == "left" || this.options.state == "right"){
 	      
 	    	  if(this.options.state == "left"){

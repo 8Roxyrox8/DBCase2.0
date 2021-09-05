@@ -25,11 +25,14 @@ var data = {
 var options = {
 		
 		 edges: {      
-			 //font: '22px arial #13A20E',
-			 font: {
+			// font: '22px arial #13A20E',
+			/* font: {
+				 //strokeWidth:0,
 			      color: '#13A20E',
 			      //size: 14px, // px
 			      face: 'arial'},
+*///borderWidthSelected:0,
+		//	 font: '12px arial #000000',
 		    smooth: {
 		      type: "continuous",
 		      forceDirection: "none",
@@ -40,7 +43,7 @@ var options = {
 			  borderWidthSelected:0,
 			  font: '12px arial #000000',//cambiado
 			 color: {
-				 border: '#000000', 
+				 border: '#ffcc45',
 				 background:'#ffcc45', 
 				 highlight: {
 				        border: '#000000',
@@ -169,7 +172,7 @@ var network_super = new vis.Network(container_super, data_super, options);
 		  top = nodes_super.get()[0].y;
 		  bottom = nodes_super.get()[0].y;
 	  }
-	  console.log(left+" "+right+" "+ top+" "+bottom);
+	  //console.log(left+" "+right+" "+ top+" "+bottom);
 	  nodes_super.forEach(function(nod) {
 		  if(left>nod.x){
 			  left = nod.x;
@@ -287,7 +290,6 @@ var network_super = new vis.Network(container_super, data_super, options);
 	  
 	  if(weakEntity && elementWithRelation != null){
 		  idRelation = addRelation(relationEntity, "create", null, "back");
-		  console.log(data_element.id+" "+idRelation+" eeees");
 		  addEntitytoRelation(data_element.id, "", "1to1", "", "1", "1", "create", idRelation, true, true);
 		  addEntitytoRelation(parseInt(elementWithRelation), "", "1toN", "", "1", "N", "create", idRelation, false);
 	  }
@@ -317,15 +319,15 @@ var network_super = new vis.Network(container_super, data_super, options);
 	  if (nombre.length>5){
 		  tam = 30+(nombre.length-5);
 	  }
-	  var data_element = {size:tam,label: nombre, shape: 'diamond', super_entity:false,
-		  color: {
+	  var data_element = {size:tam,label: nombre, shape: 'diamond', super_entity:false,color:'#FF3F20', scale:20, physics:false};
+		/*  color: {
 				 border: '#575656', 
 				 background:'#FF3F20',
 				 highlight: {
 				        border: '#000000',
 				        background: '#FF2121'
 				      }}
-		  , scale:20, physics:false};//D5FF04  cambiado(ff554b)
+		  , scale:20, physics:false};//D5FF04  cambiado(ff554b)*/
 	  
 	  if(action == "edit"){
 		  data_element.id = parseInt(idSelected);
@@ -374,14 +376,15 @@ var network_super = new vis.Network(container_super, data_super, options);
 	  var valueEntityWeak = nodes.get(parseInt(idEntity)).isWeak;
 	  
 	  var data_element = {width: 3,widthConstraint:{ minimum: 50, maximum: 160},labelBackend:name, super_entity:false, label: word_pk, dataAttribute:{entityWeak: valueEntityWeak, primaryKey: pk, composite: comp, notNull: notNll, unique: uniq, multivalued: multi, domain: dom, size: sz}, shape: 'ellipse',
-			  color: {
+		  color :"#22bdb1"/*'#4de4fc' cambiado*/, scale:20, heightConstraint:23,physics:false};
+		  /*		  color: {
 					 border: '#000000', 
 					 background:'#22bdb1',
 					 highlight: {
 					        border: '#000000',
 					        background: '#4de4fc'
 					      }}
-			 /*'#4de4fc' cambiado*/, scale:20, heightConstraint:23,physics:false};
+			 /*'#4de4fc' cambiado, scale:20, heightConstraint:23,physics:false};*/
 	  if(action == "edit"){
 		  data_element.id = parseInt(idSelected);
 		  data_element.dataAttribute.entityWeak = nodes.get(parseInt(idSelected)).dataAttribute.entityWeak;
@@ -399,7 +402,7 @@ var network_super = new vis.Network(container_super, data_super, options);
   }
   
   function addEntitytoRelation(idTo, element_role, cardinality, roleName, minCardinality, maxCardinality, action, idSelected, partActive){
-	  console.log(idTo+" - "+element_role+" - "+cardinality+" - "+roleName+" - "+minCardinality+" - "+maxCardinality+" - "+action+" - "+idSelected+" - "+ partActive);
+	 // console.log(idTo+" - "+element_role+" - "+cardinality+" - "+roleName+" - "+minCardinality+" - "+maxCardinality+" - "+action+" - "+idSelected+" - "+ partActive);
 	  var left;
 	  var center;
 	  var right;
@@ -432,24 +435,26 @@ var network_super = new vis.Network(container_super, data_super, options);
 	  }
 	  
 	  if(roleName == "")
-		  center = "  ";
+		  center = "";
 	  else
 		  center = roleName;
 	  
 	  if(partActive){
-		  labelText = minCardinality+"  ..  "+maxCardinality+" "+center;
+		  labelText = "( "+minCardinality+" , "+maxCardinality+" ) "+ center;
 	  }else{
 		  labelText = center;
 	  } 	
 	  var idEdge = existEdge(idSelected, idTo);
-	  var data_element = {width: 3,from: parseInt(idSelected), to: parseInt(idTo), label: labelText, labelFrom:right, labelTo:left, name:center, participation:partActive ,participationFrom: minCardinality, participationTo: maxCardinality, state: "false", smooth:false,arrows:{to: { enabled: direct1 }}};//cambio sin exito
-	  var data_element1 = {width: 3,from: parseInt(idSelected), to: parseInt(idTo), label: labelText, labelFrom:right, labelTo:left, name:center, participation:partActive ,participationFrom: minCardinality, participationTo: maxCardinality, state: "false", smooth:false ,arrows:{to: { enabled: direct1 }}};//cambio sin exito si agrego conf de font se va al lateral 
+
+	  var data_element = {width: 3,from: parseInt(idSelected), to: parseInt(idTo), label: labelText, labelFrom:right, labelTo:left, name:center, participation:partActive ,participationFrom: minCardinality, participationTo: maxCardinality, state: "false", smooth:false,arrows:{to: { enabled: direct1 }}};
+	  var data_element1 = {width: 3,from: parseInt(idSelected), to: parseInt(idTo), label: labelText, labelFrom:right, labelTo:left, name:center, participation:partActive ,participationFrom: minCardinality, participationTo: maxCardinality, state: "false", smooth:false ,arrows:{to: { enabled: direct1 }}};
 	  var data_element_update = {};
-	  
+
 	  if(action == "edit"){
 		  var data_element3 = {width: 3,label: labelText, labelFrom:right, labelTo:left, name:center, participation:partActive ,participationFrom: minCardinality, participationTo: maxCardinality, smooth:false, arrows:{to: { enabled: direct1 }}};
 		  data_element3.id = element_role;
 		  edges.update(data_element3);
+
 	  }else{
 		  if(idEdge != null){
 			  data_element_update.id = idEdge;
@@ -457,6 +462,7 @@ var network_super = new vis.Network(container_super, data_super, options);
 			  data_element1.state = "right";
 			  edges.update(data_element_update);
 			  edges.add(data_element1);
+
 		  }else{
 			  edges.add(data_element);
 		  }  
@@ -575,10 +581,9 @@ var network_super = new vis.Network(container_super, data_super, options);
 		  if(edgesFrom.indexOf(idEdge) != -1)
 			  idEdgeExist = idEdge;
 	  });
-	  
 	  return idEdgeExist;
   }
-  
+
   function existEdgeSuper(idFrom, idTo){
 	  var idEdgeExist = null;
 	  var edgesFrom = network_super.getConnectedEdges(parseInt(idFrom));

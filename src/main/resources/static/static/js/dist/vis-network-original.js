@@ -28002,7 +28002,7 @@
 	    key: "checkFields",
 	    value: function checkFields(option, options, referenceOptions, referenceOption, refOptionObj, path) {
 	      var log = function log(message) {
-	        console.log('%c' + message + Validator.printLocation(path, option), printStyle);
+	       // console.log('%c' + message + Validator.printLocation(path, option), printStyle);
 	      };
 
 	      var optionType = Validator.getType(options[option]);

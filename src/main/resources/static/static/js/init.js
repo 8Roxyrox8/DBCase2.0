@@ -95,9 +95,9 @@ $(document).ready(function () {
 						}
 					},
 					error: function (xhr, ajaxOptions, thrownError) {
-						console.log(xhr.status);
-						console.log(xhr.responseText);
-						console.log(thrownError);
+					//	console.log(xhr.status);
+					//	console.log(xhr.responseText);
+					//	console.log(thrownError);
 					}
 
 				});
@@ -135,9 +135,9 @@ $(document).ready(function () {
 						 
 					},
 					error: function (xhr, ajaxOptions, thrownError) {
-						console.log(xhr.status);
-						console.log(xhr.responseText);
-						console.log(thrownError);
+						//console.log(xhr.status);
+						//console.log(xhr.responseText);
+						//console.log(thrownError);
 					}
 
 				});
@@ -280,10 +280,10 @@ $(document).ready(function () {
 						$("#testResult").html(data);
 					},
 					error: function (xhr, ajaxOptions, thrownError) {
-						console.log("erro:"+edgesData);
-						console.log(xhr.status);
-						console.log(xhr.responseText);
-						console.log(thrownError);
+						console.log("error generate data:"+edgesData);
+						//console.log(xhr.status);
+						//console.log(xhr.responseText);
+						//console.log(thrownError);
 					}
 
 				});
@@ -543,7 +543,6 @@ $(document).ready(function () {
             	  case "addEntitytoRelation":
             		  nodo = getAllNodes(["box", "image"]);
             		  nodoRoles = allEntitysToRelation2(nodo_select, "box");
-            		  console.log(nodoRoles);
             		  var childs = allEntityOfRelation(nodo_select);
 	        		  var selection = -1;
 	        		  for(var i=0;i<nodo.length;i++){
@@ -551,15 +550,58 @@ $(document).ready(function () {
 	        				  selection = nodo[i].id;
 	        			  }
 	        		  }
-	        		  
+
+	        		  var min="", max="",asoc="", cardinalidad="";
+	        		  if(nodoRoles.length>0){
+							  asoc= nodoRoles[0].asoc.charAt(0),
+							  cardinalidad = nodoRoles[0].asoc.charAt(2)
+					  }
+	        		  var action = $('#typeAction').val();
+	        		  var esEditYRol = false;
+	        		  var cardinalidad1 = false;
+	        		  var minmax = false;
+	        		  var hayRol = false;
+					  var rol = "";
+	        		  if(nodoRoles.length >0){
+	        		  	if(nodoRoles[0].role.indexOf("(")!=-1){
+							min=nodoRoles[0].role.slice(2,nodoRoles[0].role.indexOf(",")).trim();
+							max=nodoRoles[0].role.slice(nodoRoles[0].role.indexOf(",") +1,nodoRoles[0].role.indexOf(")") -1).trim();
+							rol = nodoRoles[0].role.slice(nodoRoles[0].role.indexOf(")") + 1, nodoRoles[0].role.length).trim();
+							if(action=='edit') {
+								minmax=true;
+							}
+	        		  	}else {
+							rol =nodoRoles[0].role;
+						}
+					  }
+
+	        		  if(rol.length>0 && action=='edit')hayRol=true;
+
+	        		  if(action == 'edit' && nodoRoles.length ==0 ){
+						  esEditYRol = true;
+					  }
+	        		  if(action == 'edit' && cardinalidad == 1){
+	        		  	cardinalidad1 = true;
+					  }
+
             		  var dataType = {
+            		  		temp_nodeRoles_length: nodoRoles.length,
               				temp_node_length: nodo.length,
               				temp_nodes: nodo,
               				temp_node_roles: nodoRoles,
              				temp_node_select: nodo_select,
-             				temp_option_selection: selection
+             				temp_option_selection: selection,
+						  	temp_min:min,
+						  	temp_max:max,
+						  	temp_asoc: asoc,
+						  	temp_action :action,
+						  	temp_editCorrect: esEditYRol,
+						  	temp_cardinalidad1 : cardinalidad1,
+						  	temp_minMax : minmax,
+						  	temp_rol : rol,
+						  	temp_hayRol : hayRol
              			  };
-              		  
+
               		  $('#formModal').html($('#templateAddEntitytoRelation').tmpl(dataType));
               		  eventsEntityToRelation();
               	    break;

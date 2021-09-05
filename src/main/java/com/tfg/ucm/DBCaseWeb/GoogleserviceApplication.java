@@ -56,8 +56,8 @@ import modelo.conectorDBMS.FactoriaConectores;
 import java.util.UUID;
 
 @Controller
-@SpringBootApplication
 @RestController
+@SpringBootApplication
 public class GoogleserviceApplication {
 
 	/*
@@ -65,7 +65,7 @@ public class GoogleserviceApplication {
 	 * CONTROLADOR ENCARGADO DE CONECTAR VISTA WEB CON APLICACION JAVA.
 	 
 		DBASEWEB V.3
-		David Conde Cubas 
+
 	*/
 	@Autowired
 	private	MessageSource messageSource ;
@@ -372,8 +372,9 @@ public class GoogleserviceApplication {
 		 
 		}
 		else{
-			nodes = gson.fromJson(r.getData1(), tipoNode);
-			edges = gson.fromJson(r.getData2(), tipoEdge);
+			System.out.println(r.getData1().toString());
+			nodes = gson.fromJson(r.getData1().toString(), tipoNode);
+			edges = gson.fromJson(r.getData2().toString(), tipoEdge);
 		} 
 		//LLAMAMOS 2 VECES AL GENERATEESQUEMA, LA PRIMERA DE ELLAS CON LA
 		//INFORMACION DE LA AGREAGACION YLA SEGUNDA DE ELLA CON LOS ELEMENTOS 

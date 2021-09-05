@@ -37,6 +37,7 @@ public class GeneradorEsquema {
 	//atributos para la generacion de los modelos
 	private String sqlHTML="";
 	private String mr="";
+	private Boolean hayIR = false;
 	
     private MessageSource msgSrc;
     
@@ -638,23 +639,9 @@ public class GeneradorEsquema {
 	private void creaTablas(TransferConexion conexion){
 		sqlHTML +="<div class='pl-1 pt-1 pr-1 alert alert-light'><p class='h5 text-dark font-weight-bold'>"+this.msgSrc.getMessage("textosId.tables", null, this.loc)+"</p>";
 
-		Iterator tablasM=tablasMultivalorados.iterator();
-		while (tablasM.hasNext()){
-			Tabla t =(Tabla)tablasM.next();
-			if(!t.getNombreTabla().equals("agregacion"))
-				sqlHTML+=t.codigoHTMLCreacionDeTabla(conexion);
-		}
-	
-		Iterator tablasR=tablasRelaciones.values().iterator();
-		while (tablasR.hasNext()){
-			Tabla t =(Tabla)tablasR.next();
-			if(!t.getNombreTabla().equals("agregacion"))
-				sqlHTML+=t.codigoHTMLCreacionDeTabla(conexion);
-		}
-		
 		String tablasEntidad = "";
 		String tablasEntidadHTML = "";
-		
+//cambiado
 		Iterator tablasE=tablasEntidades.values().iterator();
 		while (tablasE.hasNext()){
 			Tabla t =(Tabla)tablasE.next();
@@ -669,6 +656,22 @@ public class GeneradorEsquema {
 			}
 		}
 		sqlHTML += tablasEntidadHTML;
+
+		Iterator tablasM=tablasMultivalorados.iterator();
+		while (tablasM.hasNext()){
+			Tabla t =(Tabla)tablasM.next();
+			if(!t.getNombreTabla().equals("agregacion"))
+				sqlHTML+=t.codigoHTMLCreacionDeTabla(conexion);
+		}
+	
+		Iterator tablasR=tablasRelaciones.values().iterator();
+		while (tablasR.hasNext()){
+			Tabla t =(Tabla)tablasR.next();
+			if(!t.getNombreTabla().equals("agregacion"))
+				sqlHTML+=t.codigoHTMLCreacionDeTabla(conexion);
+		}
+		
+
 		sqlHTML+="<p></p></div>";
 	}
 	
@@ -681,6 +684,7 @@ public class GeneradorEsquema {
 		int i = 0;
 		while (i < relaciones.size() && !encontrado) {
 			TransferRelacion tr = relaciones.elementAt(i);
+
 			if (tr.isIsA()) {
 				// Obtener ID del padre
 				Vector<EntidadYAridad> veya = tr.getListaEntidadesYAridades();
@@ -693,8 +697,7 @@ public class GeneradorEsquema {
 				
 				Tabla t = new Tabla(te.getNombre(), te.getListaRestricciones(), controlador);
 				t = t.creaClonSinAmbiguedadNiEspacios(sqlType);
-				
-				encontrado = t.getNombreTabla().equalsIgnoreCase(tabla.getNombreTabla());
+				encontrado = t.getNombreTabla().replace("`","").equalsIgnoreCase(tabla.getNombreTabla());
 			}
 			i++;
 		}
@@ -751,7 +754,7 @@ public class GeneradorEsquema {
 		while (tablasE.hasNext()){
 			Tabla t =(Tabla)tablasE.next();
 			if(!t.getNombreTabla().equals("agregacion")){
-				if (esPadreEnIsa(t,conexion.getRuta())){
+				if (esPadreEnIsa(t,conexion.getRuta() ) || t.getForeigns().size()==0){
 					restEntidadHTML = t.codigoHTMLClavesDeTabla(conexion) + restEntidadHTML;
 					restEntidad = t.codigoEstandarClavesDeTabla(conexion) + restEntidad;
 				}else{
@@ -786,6 +789,7 @@ public class GeneradorEsquema {
 		mr+=generaIR(tablasEntidades.values().iterator());
 		mr+=generaIR(tablasRelaciones.values().iterator());
 		mr+=generaIR(tablasMultivalorados.iterator());
+		if(!mr.isEmpty())this.hayIR = true;
 		return mr;
 	}
 	
@@ -805,8 +809,9 @@ public class GeneradorEsquema {
 					abierto=true;
 				}
 				
-				if(!foreigns.elementAt(j)[3].isEmpty())
-				claves+= t.getNombreTabla()+"."+foreigns.elementAt(j)[3]+"_"+foreigns.elementAt(j)[0];
+				if(!foreigns.elementAt(j)[3].isEmpty()) {
+					claves += t.getNombreTabla() + "." + foreigns.elementAt(j)[3] + "_" + foreigns.elementAt(j)[0];
+				}
 				else{claves+= t.getNombreTabla()+"."+foreigns.elementAt(j)[0];
 				}
 				valores+=foreigns.elementAt(j)[2];
