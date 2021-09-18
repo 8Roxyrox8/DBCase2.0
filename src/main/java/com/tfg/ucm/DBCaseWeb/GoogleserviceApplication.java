@@ -557,9 +557,6 @@ public class GoogleserviceApplication {
 					c.mensajeDesde_GUI(TC.GUIAnadirEntidadHija_ClickBotonAnadir,vData);
 
 			}
-			else {
-				//System.err.println("problemas al parseo de las relaciones");
-			}
 		}
 
 		String respuesta ="";
@@ -635,8 +632,6 @@ public class GoogleserviceApplication {
 				dom=(TipoDominio.VARCHAR).toString();
 				attributeTransf.setDominio(dom);
 				attributeTransf.setListaRestricciones(new Vector());
-
-				//dataParseada.add(attributeTransf);
 				dataParseada.put(nodes.get(i).getId(), attributeTransf);
 				break;
 
@@ -656,7 +651,6 @@ public class GoogleserviceApplication {
 				relationTransf.setOffsetAttr(0);
 				c.mensajeDesde_GUI(TC.GUIInsertarRelacion_Click_BotonInsertar, relationTransf);
 
-				//ataParseada.add(relationTransf);
 				dataParseada.put(nodes.get(i).getId(), relationTransf);
 				break;
 
@@ -675,7 +669,6 @@ public class GoogleserviceApplication {
 				relationTransfIsA.setOffsetAttr(0);
 				c.mensajeDesde_GUI(TC.GUIInsertarRelacionIsA_Click_BotonInsertar, relationTransfIsA);
 
-				//ataParseada.add(relationTransf);
 				dataParseada.put(nodes.get(i).getId(), relationTransfIsA);
 				break;
 		}
@@ -703,7 +696,6 @@ public class GoogleserviceApplication {
 
 			if (ta.isClavePrimaria()) 
 				c.mensajeDesde_PanelDiseno(TC.PanelDiseno_Click_EditarClavePrimariaAtributo,v1);
-
 
 		}
 		//RELACION ENTRE RELACION Y ATRIBUTO NO ESTA CONTEMPLADO

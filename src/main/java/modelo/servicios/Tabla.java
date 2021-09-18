@@ -96,41 +96,56 @@ public class Tabla {
 	public void aniadeListaAtributos(Vector<String[]> listado, Vector<String> rest, Hashtable<Integer,Enumerado> dominios){
 		for (int i=0;i<listado.size();i++){
 			String[] trio = listado.elementAt(i);
-			if (trio.length < 4) 
+			if (trio.length < 4) {
+				//if(!this.nombreTabla.equalsIgnoreCase(trio[2])){
+				//	aniadeAtributo(trio[2] + "_"+trio[0], trio[1], trio[2], dominios, rest, false, false);
+				//}//else
 				aniadeAtributo(trio[0], trio[1], trio[2], dominios, rest, false, false);
+			}
 			else{
+
 				if(trio.length == 4)
-					aniadeAtributo(trio[0], trio[1], trio[2], dominios,rest, trio[3].equalsIgnoreCase("1"),false);
+					aniadeAtributo(trio[0], trio[1], trio[2], dominios, rest, trio[3].equalsIgnoreCase("1"), false);
 				else
-					aniadeAtributo(trio[0], trio[1], trio[2], dominios,rest, trio[3].equalsIgnoreCase("1"), trio[4].equalsIgnoreCase("1"));
-			} 
-			// else
-			// 	aniadeAtributo(trio[0], trio[1], trio[2], dominios,rest, trio[3].equalsIgnoreCase("1"), trio[4].equalsIgnoreCase("1"));
+					aniadeAtributo(trio[0], trio[1], trio[2], dominios, rest, trio[3].equalsIgnoreCase("1"), trio[4].equalsIgnoreCase("1"));
+
+			}
 		}
 	}
 	
-	public void aniadeListaClavesPrimarias(Vector<String[]> listado){
-		for (int i=0;i<listado.size();i++) primaries.add(listado.elementAt(i));
+	public void aniadeListaClavesPrimarias(Vector<String[]> listado) {
+		for (int i = 0; i < listado.size(); i++) {
+			String[] trio = listado.elementAt(i);
+			primaries.add(listado.elementAt(i));
+		}
 	}
-	
-	public void aniadeListaClavesForaneas(Vector<String[]> listado,String nombreEntidad, String[] atributosReferenciados){
+
+
+	public void aniadeListaClavesForaneas(Vector<String[]> listado,String nombreEntidad, String[] atributosReferenciados,boolean tieneRol){
 		for (int i=0;i<listado.size();i++){
 			String []trio=new String[4];
 			String []par=listado.elementAt(i);
 			trio[0]=par[0];
 			trio[1]=par[1];
+
+			if(par[3].contains("no_encont" )|| !tieneRol){
+				trio[0] = nombreEntidad +"_"+trio[0] ;
+			}
 			trio[2]=nombreEntidad + "." + atributosReferenciados[i];
 			trio[3]=nombreEntidad;
 			foreigns.add(trio);
 		}
 	}
 
-	public void aniadeListaClavesForaneas(Vector<String[]> listado,Vector<String> listadoEntidades, String[] atributosReferenciados){
+	public void aniadeListaClavesForaneas(Vector<String[]> listado,Vector<String> listadoEntidades, String[] atributosReferenciados, boolean tieneRol){
 		for (int i=0;i<listado.size();i++){
 			String []trio=new String[4];
 			String []par=listado.elementAt(i);
 			trio[0]=par[0];
 			trio[1]=par[1];
+			if(par[3].contains("no_encont") || !tieneRol){
+				trio[0] = listadoEntidades.elementAt(i)+"_"+trio[0] ;
+			}
 			trio[2]=listadoEntidades.elementAt(i) + "." + atributosReferenciados[i];
 			trio[3]=listadoEntidades.elementAt(i);
 			foreigns.add(trio);
@@ -207,7 +222,10 @@ public class Tabla {
 				String nombre="";
 				if (this.estaRepe(foreigns.elementAt(i)[0], atributos)) 
 					nombre =  foreigns.elementAt(i)[3]+"_"+nombreColumn(foreigns.elementAt(i)[2], foreigns.elementAt(i)[3]);
-				else nombre = foreigns.elementAt(i)[0];
+				else{
+					nombre = foreigns.elementAt(i)[0];//rox
+
+				}
 				t.aniadeClaveForanea(ponGuionesBajos(nombre,sqlType), 
 									foreigns.elementAt(i)[1], ponGuionesBajos(foreigns.elementAt(i)[2],sqlType), foreigns.elementAt(i)[3]);
 			}
@@ -291,11 +309,6 @@ public class Tabla {
 				mr+=this.ponGuionesBajos(primaries.elementAt(i)[0],sqlType);
 				mr+=", ";atr = true;
 			}
-		/*for (int j=0;j<definitivo.size();j++)
-			if (nombreTabla == definitivo.elementAt(j)[2]) {
-				mr+=this.ponGuionesBajos(definitivo.elementAt(j)[0]);
-				mr+=", ";atr = true;
-			}*/
 		mr = mr.substring(0, mr.length()-2);
 		if(atr)mr+=")";
 		return mr;
@@ -334,9 +347,9 @@ public class Tabla {
 			case "MYSQL":
 				cadena = "`"+cadena+"`";
 			break;
-		} 
+		}
 		// cadena= cadena.replaceAll(" ", " ");
-		
+
 		return cadena;
 	}
 	public void aniadeListaAtributosComoSlave(Vector<String[]> listado){
@@ -446,5 +459,8 @@ public class Tabla {
 	}
 	public void setConstraints(Vector<String> restr) {
 		constraints.addAll(restr);
+	}
+	public void setNombreForeing(int i, String nombre){
+		this.foreigns.elementAt(i)[0] = nombre ;
 	}
 }

@@ -121,6 +121,7 @@ public class ConectorAccessOdbc extends ConectorDBMS {
 				if(!abierto) {
 					codigo+="<p><strong>ALTER TABLE </strong>"+t.getNombreTabla()+"<strong> ADD CONSTRAINT </strong>" + 
 							t.getNombreTabla_ini() +  "_" + foreigns.elementAt(j)[0].substring(1,foreigns.elementAt(j)[0].length()-1) +  t.getNombreTabla_fin() + "<strong> FOREIGN KEY </strong>(";
+
 					abierto=true;
 				}
 				keys+=foreigns.elementAt(j)[0];

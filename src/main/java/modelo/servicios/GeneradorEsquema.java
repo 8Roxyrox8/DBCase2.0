@@ -111,7 +111,7 @@ public class GeneradorEsquema {
 				else
 					if (ta.getCompuesto())
 						tabla.aniadeListaClavesPrimarias(this.atributoCompuesto(ta,te.getNombre(),""));
-					//else if(te.isDebil()) tabla.aniadeListaClavesPrimarias(claves);
+
 					else //si es normal, lo aniadimos como clave primaria.
 						tabla.aniadeClavePrimaria(ta.getNombre(),ta.getDominio(),te.getNombre(),ta.getEntidad_origenName());
 			}
@@ -134,6 +134,7 @@ public class GeneradorEsquema {
 	private void generaTablasRelaciones(String sqlType) {
 		DAORelaciones daoRelaciones = new DAORelaciones(controlador.getPath());
 		Vector<TransferRelacion> relaciones = daoRelaciones.ListaDeRelaciones();
+
 		// recorremos las relaciones creando sus tablas, en funcion de su tipo.
 		for (int i = 0; i < relaciones.size(); i++) {
 			TransferRelacion tr = relaciones.elementAt(i);
@@ -188,12 +189,15 @@ public class GeneradorEsquema {
 					Vector<String[]> primarias = new Vector<String[]>();
 					Vector<String> primariasEntidades = new Vector<>();
 					String[] referenciadas = new String[previasPrimarias.size()];
-					
+					boolean tieneRol = false;
 					for (int q=0; q<previasPrimarias.size(); q++){
 						String[] clave = new String[5];
 						clave[3]="0";
 						clave[4]=eya.getPrincipioRango()==0?"0":"1";
-						if (!eya.getRol().trim().equals("")) clave[0] = eya.getRol() + "_" + previasPrimarias.get(q)[0];
+						if (!eya.getRol().trim().equals(""))
+						{clave[0] = eya.getRol() + "_" + previasPrimarias.get(q)[0];
+						tieneRol = true;
+						}
 						else clave[0] = previasPrimarias.get(q)[0];
 						clave[1] = previasPrimarias.get(q)[1];
 						clave[2] = previasPrimarias.get(q)[2];
@@ -208,8 +212,7 @@ public class GeneradorEsquema {
 					}
 					
 					tabla.aniadeListaAtributos(primarias, tr.getListaRestricciones(), tiposEnumerados);
-					tabla.aniadeListaClavesForaneas(primarias, primariasEntidades, referenciadas);
-					//tabla.aniadeListaClavesForaneas(primarias, ent.getNombreTabla(), referenciadas);
+					tabla.aniadeListaClavesForaneas(primarias, primariasEntidades, referenciadas, tieneRol);
 					
 					// Si es 0..1 o 1..1 poner como clave
 					if (eya.getFinalRango() > 1) tabla.aniadeListaClavesPrimarias(primarias);
@@ -221,7 +224,6 @@ public class GeneradorEsquema {
 							for(String[] clave : (Vector<String[]>)ent.getPrimaries())
 								restriccionesPerdidas.add(
 										new restriccionPerdida(ent.getNombreTabla()+"_"+clave[0], tr.getNombre(), restriccionPerdida.CANDIDATA));
-				//						new restriccionPerdida(clave[0], tr.getNombre(), restriccionPerdida.CANDIDATA));
 							String uniques = "";
 							for (int q = 0; q < primarias.size(); q++){
 								if (q == 0) uniques += primarias.get(q)[0];
@@ -293,9 +295,9 @@ public class GeneradorEsquema {
 					}
 					
 					tablasEntidades.get(hija.getEntidad())
-					.aniadeListaClavesForaneas(
-							tablasEntidades.get(padre.getEntidad()).getPrimaries(), 
-							tablasEntidades.get(padre.getEntidad()).getNombreTabla(),referenciadas);
+							.aniadeListaClavesForaneas(
+									tablasEntidades.get(padre.getEntidad()).getPrimaries(),
+									tablasEntidades.get(padre.getEntidad()).getNombreTabla(),referenciadas, false);
 				}
 
 			}
@@ -331,7 +333,7 @@ public class GeneradorEsquema {
 						Vector<String[]> clavesFuerte = tFuerte.getPrimaries();
 						String[] referenciadas = new String[clavesFuerte.size()];
 						for (int q=0; q<clavesFuerte.size(); q++) referenciadas[q] = clavesFuerte.get(q)[0];
-						tDebil.aniadeListaClavesForaneas(tFuerte.getPrimaries(),tFuerte.getNombreTabla(), referenciadas);
+						tDebil.aniadeListaClavesForaneas(tFuerte.getPrimaries(),tFuerte.getNombreTabla(), referenciadas,false);
 						tDebil.aniadeListaClavesPrimarias(tFuerte.getPrimaries());
 					}
 				}
@@ -385,7 +387,6 @@ public class GeneradorEsquema {
 		creaEnums(conexion);
 		ponClaves(conexion);	
 		ponRestricciones(conexion);
-		//controlador.mensajeDesde_SS(TC.SS_GeneracionScriptSQL,sqlHTML);
 		return sqlHTML;
 	}
 
@@ -656,22 +657,18 @@ public class GeneradorEsquema {
 			}
 		}
 		sqlHTML += tablasEntidadHTML;
-
 		Iterator tablasM=tablasMultivalorados.iterator();
 		while (tablasM.hasNext()){
 			Tabla t =(Tabla)tablasM.next();
 			if(!t.getNombreTabla().equals("agregacion"))
 				sqlHTML+=t.codigoHTMLCreacionDeTabla(conexion);
 		}
-	
 		Iterator tablasR=tablasRelaciones.values().iterator();
 		while (tablasR.hasNext()){
 			Tabla t =(Tabla)tablasR.next();
 			if(!t.getNombreTabla().equals("agregacion"))
 				sqlHTML+=t.codigoHTMLCreacionDeTabla(conexion);
 		}
-		
-
 		sqlHTML+="<p></p></div>";
 	}
 	
@@ -801,6 +798,7 @@ public class GeneradorEsquema {
 		while (tabla.hasNext()){
 			Tabla t =(Tabla)tabla.next();
 			Vector<String[]> foreigns = t.getForeigns();
+			Vector<String[]> primaries = t.getPrimaries();
 			boolean abierto = false;
 			String claves="", valores = "";
 			for (int j=0;j<foreigns.size();j++) {
@@ -808,12 +806,8 @@ public class GeneradorEsquema {
 					code+="<p>";
 					abierto=true;
 				}
-				
-				if(!foreigns.elementAt(j)[3].isEmpty()) {
-					claves += t.getNombreTabla() + "." + foreigns.elementAt(j)[3] + "_" + foreigns.elementAt(j)[0];
-				}
-				else{claves+= t.getNombreTabla()+"."+foreigns.elementAt(j)[0];
-				}
+
+				claves+= t.getNombreTabla()+"."+foreigns.elementAt(j)[0];
 				valores+=foreigns.elementAt(j)[2];
 				if(foreigns.size()-j>1) {
 					if(foreigns.elementAt(j+1)[3]!=foreigns.elementAt(j)[3] || foreigns.elementAt(j+1)[2].equals(foreigns.elementAt(j)[2])) {
@@ -925,7 +919,7 @@ public class GeneradorEsquema {
 		String[] referenciadas = new String[clavesEntidad.size()];
 		for (int q=0; q<clavesEntidad.size(); q++) referenciadas[q] = clavesEntidad.get(q)[0];
 		
-		tablaMulti.aniadeListaClavesForaneas(tablaEntidad.getPrimaries(),tablaEntidad.getNombreTabla(), referenciadas);
+		tablaMulti.aniadeListaClavesForaneas(tablaEntidad.getPrimaries(),tablaEntidad.getNombreTabla(), referenciadas, false);
 		tablasMultivalorados.add(tablaMulti);
 		for(String rest : (Vector<String>)ta.getListaRestricciones())
 			restriccionesPerdidas.add(new restriccionPerdida(tablaMulti.getNombreTabla(), rest, restriccionPerdida.TABLA));

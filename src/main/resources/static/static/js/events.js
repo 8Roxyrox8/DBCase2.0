@@ -93,7 +93,6 @@ function eventsEntityToRelation(){
 			}
 		}else{
 			$("#insertModal").prop("disabled", false);
-			$("#roleName").val("");
 		}
 	});
 	$("#maxCardinality").blur(function(){
@@ -148,10 +147,10 @@ function eventsEntityToRelation(){
 	$("#roleName").on('keydown', function (e)
 	{
 		try {
-			if (( e.keyCode == 46))
-				return false;
-			else
-				return true;
+			var k;
+			document.all ? k = e.keyCode : k = e.which;
+			return ((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57));
+
 		}
 		catch (Exception)
 		{
@@ -582,8 +581,8 @@ function updateTableElements(){
 			doc.text(170, 12, "DBCASE Web");
 			doc.addImage(dataURL, 'PNG', 15, 40, 180, 160);
 
-
-			saveAs(doc.output('blob'), document.getElementById("docs-title").value+"General.pdf");
+			//saveAs(doc.output('blob'), $('#idText').text()+""+(new Date().getMilliseconds())+".pdf");
+			saveAs(doc.output('blob'), document.getElementById("docs-title").value+".pdf");
 		});
 	});
 
@@ -606,7 +605,7 @@ function updateTableElements(){
 			res = "#"+$("#textGeneratedBy").text()+"\r\n"+res;
 			var blob = new Blob([res], {type: "text/plain;charset=utf-8"});
 			//saveAs(blob, $('#idText').text()+""+(new Date().getMilliseconds())+".sql");
-			saveAs(blob,document.getElementById("docs-title").value+"Phisic.sql");
+			saveAs(blob,document.getElementById("docs-title").value+".sql");
 			
 		}
 	});
@@ -628,7 +627,7 @@ function updateTableElements(){
 			res = "#"+$("#textGeneratedBy").text()+"\r\n"+res;
 			var blob = new Blob([res], {type: "text/plain;charset=utf-8"});
 			//cambiar nombre documento
-			saveAs(blob,document.getElementById("docs-title").value+"Logic.txt");
+			saveAs(blob,document.getElementById("docs-title").value+".txt");
 		}
 	});
 	
