@@ -133,7 +133,7 @@ public class ConectorMySQL extends ConectorDBMS {
 				keys+=foreigns.elementAt(j)[0];
 				rfrncs+=nombreColumn(foreigns.elementAt(j)[2], foreigns.elementAt(j)[3]);
 				if(foreigns.size()-j>1) {
-					if(foreigns.elementAt(j+1)[3]!=foreigns.elementAt(j)[3]) {
+					if(!foreigns.elementAt(j+1)[3].equalsIgnoreCase(foreigns.elementAt(j)[3] )||foreigns.elementAt(j+1)[2].equalsIgnoreCase(foreigns.elementAt(j)[2])  ) {
 						codigo+=keys+") <strong> REFERENCES </strong>"+foreigns.elementAt(j)[3]+"("+rfrncs+");</p>";
 						abierto = false;keys="";rfrncs="";
 					}

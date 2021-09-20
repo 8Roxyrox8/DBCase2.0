@@ -136,19 +136,38 @@ public class Tabla {
 			foreigns.add(trio);
 		}
 	}
-
+	private void rectificaForeigns(){
+		for(int i =0; i < foreigns.size(); i++){
+			if(!foreigns.elementAt(i)[0].equalsIgnoreCase(atributos.elementAt(i)[0])){
+				foreigns.elementAt(i)[0] = atributos.elementAt(i)[0];
+			}
+		}
+	}
 	public void aniadeListaClavesForaneas(Vector<String[]> listado,Vector<String> listadoEntidades, String[] atributosReferenciados, boolean tieneRol){
 		for (int i=0;i<listado.size();i++){
-			String []trio=new String[4];
+			String []trio=new String[5];
 			String []par=listado.elementAt(i);
 			trio[0]=par[0];
 			trio[1]=par[1];
-			if(par[3].contains("no_encont") || !tieneRol){
-				trio[0] = listadoEntidades.elementAt(i)+"_"+trio[0] ;
-			}
+
 			trio[2]=listadoEntidades.elementAt(i) + "." + atributosReferenciados[i];
 			trio[3]=listadoEntidades.elementAt(i);
+
+			//if(par[3].contains("no_encont") || !tieneRol || !esRecur){
+			if(par[3].contains("no_encont") || !tieneRol){
+				if(tieneRol) trio[4] = trio[0];//guardo el rol
+
+				if(trio[0].contains("_"))
+				trio[0]	=trio[2].replace(".", "_");
+				else
+				trio[0] = listadoEntidades.elementAt(i)+"_"+trio[0] ;
+			}
 			foreigns.add(trio);
+
+			if(this.atributos.size()>1 && this.foreigns.size()>1 && tieneRol){
+				rectificaForeigns();
+			}
+
 		}
 	}
 

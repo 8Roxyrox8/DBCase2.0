@@ -552,7 +552,9 @@ $(document).ready(function () {
 	        		  }
 
 	        		  var min="", max="",asoc="", cardinalidad="";
-	        		  if(nodoRoles.length>0){
+
+	        		  if(nodoRoles.length>0 && nodoRoles[0].asoc !== undefined){
+
 							  asoc= nodoRoles[0].asoc.charAt(0),
 							  cardinalidad = nodoRoles[0].asoc.charAt(2)
 					  }
